@@ -8,6 +8,7 @@
         disableReturn: false,
         disableDoubleReturn: false,
         disableExtraSpaces: false,
+        disableExtraSpacesEOL: false,
         disableEditing: false,
         autoLink: false,
         elementsContainer: false,

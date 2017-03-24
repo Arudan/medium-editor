@@ -7,9 +7,20 @@
         var node = MediumEditor.selection.getSelectionStart(this.options.ownerDocument),
             textContent = node.textContent,
             caretPositions = MediumEditor.selection.getCaretOffsets(node);
-
         if ((textContent[caretPositions.left - 1] === undefined) || (textContent[caretPositions.left - 1].trim() === '') || (textContent[caretPositions.left] !== undefined && textContent[caretPositions.left].trim() === '')) {
             event.preventDefault();
+        }
+
+    }
+
+    function handleDisableExtraSpacesEOL(event) {
+        var node = MediumEditor.selection.getSelectionStart(this.options.ownerDocument),
+            textContent = node.textContent,
+            caretPositions = MediumEditor.selection.getCaretOffsets(node);
+        if (caretPositions.right !== 0) {
+            if ((textContent[caretPositions.left - 1] === undefined) || (textContent[caretPositions.left - 1].trim() === '') || (textContent[caretPositions.left] !== undefined && textContent[caretPositions.left].trim() === '')) {
+                event.preventDefault();
+            }
         }
     }
 
@@ -465,6 +476,11 @@
         // Bind double space event
         if (this.options.disableExtraSpaces) {
             this.subscribe('editableKeydownSpace', handleDisableExtraSpaces.bind(this));
+        }
+
+        // Bind double space event only on EOL, if double space event is disabled
+        if (!this.options.disableExtraSpaces && this.options.disableExtraSpacesEOL) {
+            this.subscribe('editableKeydownSpace', handleDisableExtraSpacesEOL.bind(this));
         }
 
         // Make sure we only attach to editableKeydownEnter once for disable-return options
