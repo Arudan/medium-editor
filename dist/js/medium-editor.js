@@ -7024,7 +7024,7 @@ MediumEditor.extensions = {};
         }
 
         // Bind double space event only on EOL, if double space event is disabled
-        if (!this.options.disableExtraSpaces && this.options.handleDisableExtraSpacesEOL) {
+        if (!this.options.disableExtraSpaces && this.options.disableExtraSpacesEOL) {
             this.subscribe('editableKeydownSpace', handleDisableExtraSpacesEOL.bind(this));
         }
 
