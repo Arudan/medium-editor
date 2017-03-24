@@ -6559,13 +6559,26 @@ MediumEditor.extensions = {};
     }
 
     function handleDisableExtraSpacesEOL(event) {
+        function checkTextContent(position) {
+            return (textContent[position] === undefined) || (textContent[position].trim() === '');
+        }
+
+        function checkEOL(position) {
+            return (textContent[position] !== undefined && textContent[position].trim() === '');
+        }
+
         var node = MediumEditor.selection.getSelectionStart(this.options.ownerDocument),
             textContent = node.textContent,
             caretPositions = MediumEditor.selection.getCaretOffsets(node);
-        if (caretPositions.right !== 0) {
-            if ((textContent[caretPositions.left - 1] === undefined) || (textContent[caretPositions.left - 1].trim() === '') || (textContent[caretPositions.left] !== undefined && textContent[caretPositions.left].trim() === '')) {
-                event.preventDefault();
-            }
+
+        if (caretPositions.right === 0 && (checkTextContent(caretPositions.left - 1) || checkEOL(caretPositions.left))) {
+            event.preventDefault();
+        } else if (checkTextContent(caretPositions.left - 2) && checkTextContent(caretPositions.left - 1)) {
+            event.preventDefault();
+        } else if (checkTextContent(caretPositions.left - 1) && checkTextContent(caretPositions.left)) {
+            event.preventDefault();
+        } else if (caretPositions.right !== 0 && checkTextContent(caretPositions.left) && checkTextContent(caretPositions.left + 1)) {
+            event.preventDefault();
         }
     }
 
